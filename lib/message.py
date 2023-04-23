@@ -28,10 +28,10 @@ class Message:
 
 
 class Messages:
-    def __init__(self, title: str, version: str, data: list[Message] = ()):
+    def __init__(self, title: str, version: str, data: list[Message] = None):
         self.title: str = title
         self.version = version
-        self.data: list[Message] = data
+        self.data: list[Message] = [] if data is None or len(data) == 0 else data
 
     def push(self, msg_group: str, msg_type: str, date: str, time: str, name: str, text: str):
         self.data.append(Message(msg_group, msg_type, date, time, name, text))
