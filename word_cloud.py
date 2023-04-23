@@ -1,10 +1,11 @@
+from pathlib import Path
 from abc import ABC
 from sys import argv
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 from tokenization_jieba import tokenization
 from lib import Messages, download_resource, process_cache, Action
-
+from preprocess.conversation_backup import preprocess
 
 # def usage():
 #     pass
@@ -26,23 +27,30 @@ from lib import Messages, download_resource, process_cache, Action
 #
 #     WordCloudAction.execute(argv[1:])
 
+filepath = Path(argv[1])
+
+if not filepath.is_file():
+    print("file {} not exists".format(argv[1]))
+    exit(0)
+
+messages = preprocess(filepath)
 
 font_path = download_resource('https://github.com/tkiapril/source-fonts/raw/master/SourceHanSansTW-Regular.otf')
 
-message = ''
-with open('./.data/messages/202304211826.json') as file_object:
-    for line in file_object:
-        message += line
-
-message = Messages.make(message)
+# message = ''
+# with open('./.data/messages/202304211826.json') as file_object:
+#     for line in file_object:
+#         message += line
+#
+# message = Messages.make(message)
 
 targetMessages = filter(
     lambda message: message.is_text_message() and message.name == '探吉教-淡藍羽翼的韭韭TMF',
-    message.data
+    messages.data
 )
 
 
-@process_cache('tokenization', message.version)
+# @process_cache('tokenization', message.version)
 def tokenization_message(msg: str):
     return tokenization(msg, 200)
 
