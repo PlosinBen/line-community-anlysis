@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  python:
+    build: ./docker
+    volumes:
+      ### app code
+      - .:/app
+    entrypoint: [ "tail", "-f", "/dev/null" ]
