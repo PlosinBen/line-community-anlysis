@@ -47,11 +47,11 @@ def parse_file_content(filepath: Path) -> Messages:
                 messages.push(Message.USER_GROUP, Message.USER_RETRACT, message_date, *res.groups())
                 continue
 
-            res = re.match(r'^(\d{2}\:\d{2})\t(.+)\t([貼圖])\n$', line)
+            res = re.match(r'^(\d{2}\:\d{2})\t(.+)\t(\[貼圖\])\n$', line)
             if res is not None:
                 messages.push(Message.USER_GROUP, Message.USER_STICKER, message_date, *res.groups())
                 continue
-            res = re.match(r'^(\d{2}\:\d{2})\t(.+)\t([照片])\n$', line)
+            res = re.match(r'^(\d{2}\:\d{2})\t(.+)\t(\[照片\])\n$', line)
             if res is not None:
                 messages.push(Message.USER_GROUP, Message.USER_IMAGE, message_date, *res.groups())
                 continue

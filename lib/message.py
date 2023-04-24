@@ -1,4 +1,5 @@
 import json
+from typing import Callable
 
 
 class Message:
@@ -54,18 +55,27 @@ class Messages:
         self.version = version
         self.data: list[Message] = [] if data is None or len(data) == 0 else data
 
-    def push(self, msg_group: str, msg_type: str, date: str, time: str, name: str, text: str):
-        self.data.append(Message(msg_group, msg_type, date, time, name, text))
-
-    def compact(self, text: str):
-        self.data[-1].push(text)
-
     @staticmethod
     def make(content: str):
         content = json.loads(content)
         content['data'] = [Message(**el) for el in content['data']]
 
         return Messages(**content)
+
+    def push(self, msg_group: str, msg_type: str, date: str, time: str, name: str, text: str):
+        self.data.append(Message(msg_group, msg_type, date, time, name, text))
+
+    def compact(self, text: str):
+        self.data[-1].push(text)
+
+    def filter(self, func: Callable):
+        self.data = list(
+            filter(
+                func,
+                self.data
+            )
+        )
+        return self
 
     def __str__(self):
         return json.dumps(
