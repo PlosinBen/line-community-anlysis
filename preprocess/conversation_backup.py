@@ -29,36 +29,36 @@ def parse_file_content(filepath: Path) -> Messages:
             res = re.match(
                 r'^(\d{2}\:\d{2})\t\t(.+)(已將聊天室的人數上限設為\d+人|變更了聊天室圖片|已將.+強制退出社群。)\n$', line)
             if res is not None:
-                messages.push('system_message', 'admin_operate', message_date, *res.groups())
+                messages.push(Message.SYSTEM_GROUP, Message.SYSTEM_ADMIN_OPERATE, message_date, *res.groups())
                 continue
 
             res = re.match(r'^(\d{2}\:\d{2})\t\t(.+)(的訊息可能已違反社群服務條款而遭刪除)\n$', line)
             if res is not None:
-                messages.push('system_message', 'ai_delete_message', message_date, *res.groups())
+                messages.push(Message.SYSTEM_GROUP, Message.SYSTEM_AI_DELETE_MESSAGE, message_date, *res.groups())
                 continue
 
             res = re.match(r'^(\d{2}\:\d{2})\t\t(.+)(加入聊天|離開聊天)\n$', line)
             if res is not None:
-                messages.push('system_message', 'user_join_leave', message_date, *res.groups())
+                messages.push(Message.SYSTEM_GROUP, Message.SYSTEM_USER_JOIN_LEAVE, message_date, *res.groups())
                 continue
 
             res = re.match(r'^(\d{2}\:\d{2})\t\t(.+)(已收回訊息)\n$', line)
             if res is not None:
-                messages.push('message', 'retract_message', message_date, *res.groups())
+                messages.push(Message.USER_GROUP, Message.USER_RETRACT, message_date, *res.groups())
                 continue
 
             res = re.match(r'^(\d{2}\:\d{2})\t(.+)\t([貼圖])\n$', line)
             if res is not None:
-                messages.push('message', 'sticker', message_date, *res.groups())
+                messages.push(Message.USER_GROUP, Message.USER_STICKER, message_date, *res.groups())
                 continue
             res = re.match(r'^(\d{2}\:\d{2})\t(.+)\t([照片])\n$', line)
             if res is not None:
-                messages.push('message', 'image', message_date, *res.groups())
+                messages.push(Message.USER_GROUP, Message.USER_IMAGE, message_date, *res.groups())
                 continue
 
             res = re.match(r'^(\d{2}\:\d{2})\t(.+)\t(.+)\n$', line)
             if res is not None:
-                messages.push('message', 'text', message_date, *res.groups())
+                messages.push(Message.USER_GROUP, Message.USER_TEXT, message_date, *res.groups())
                 continue
 
             messages.compact(line)
