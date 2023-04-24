@@ -15,7 +15,7 @@ def parse_file_content(filepath: Path) -> Messages:
     with filepath.open() as file_object:
         messages = Messages(
             file_object.readline(),
-            ''.join(re.findall(r'\d+', file_object.readline()))
+            file_object.readline()
         )
 
         file_object.readline()
