@@ -3,7 +3,15 @@ from pathlib import Path
 import re
 
 
-def preprocess(filepath: Path) -> Messages:
+def load_file_version(filepath: Path) -> str:
+    with filepath.open() as file_object:
+        return '{}-{}'.format(
+            re.match(f'^\[LINE\] (.+)的聊天', file_object.readline()).groups()[0],
+            ''.join(re.findall(r'\d+', file_object.readline()))
+        )
+
+
+def parse_file_content(filepath: Path) -> Messages:
     with filepath.open() as file_object:
         messages = Messages(
             file_object.readline(),
@@ -56,3 +64,13 @@ def preprocess(filepath: Path) -> Messages:
             messages.compact(line)
 
     return messages
+
+
+def preprocess(filepath: Path) -> Messages:
+    file_version = load_file_version(filepath)
+
+    @process_cache('message', file_version)
+    def call_parse_file(target_file: Path) -> Messages:
+        return parse_file_content(target_file)
+
+    return call_parse_file(filepath)
