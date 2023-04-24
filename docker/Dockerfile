@@ -5,11 +5,10 @@ WORKDIR /app
 
 #COPY requirements.txt /app/requirements.txt
 #RUN pip install -r requirements.txt
-RUN apk add font-isas-misc &&  \
-    pip install --upgrade pip setuptools &&  \
+RUN pip install --upgrade pip setuptools &&  \
     #pip install -U git+https://github.com/p208p2002/ckiptagger@ckiptagger-tf2.1 && \
     #pip install -U ckiptagger[tf,gdown] && \
-    pip install jieba wordcloud python-dotenv && \
+    pip install jieba wordcloud python-dotenv termgraph plotext && \
     pip cache remove *
 
 # Now copy in our code, and run it
