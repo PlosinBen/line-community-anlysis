@@ -2,8 +2,9 @@ version: "3.9"
 
 services:
   python:
-    build: ./docker
+    build:
+      dockerfile: ./backend.Dockerfile
     volumes:
       ### app code
-      - .:/app
+      - ./backend:/app
     entrypoint: [ "tail", "-f", "/dev/null" ]
