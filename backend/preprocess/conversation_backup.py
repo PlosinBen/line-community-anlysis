@@ -1,4 +1,4 @@
-from lib import Messages, Message, process_cache
+from backend.lib import Messages, Message, process_cache
 from pathlib import Path
 import re
 

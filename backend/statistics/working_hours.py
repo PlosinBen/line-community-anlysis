@@ -1,5 +1,5 @@
 from pathlib import Path
-from preprocess.conversation_backup import preprocess
+from backend.preprocess.conversation_backup import preprocess
 from sys import argv
 import plotext as plt
 import numpy as np

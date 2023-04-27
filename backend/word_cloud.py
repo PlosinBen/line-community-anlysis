@@ -1,11 +1,10 @@
 from pathlib import Path
-from abc import ABC
 from sys import argv
-from wordcloud import WordCloud, STOPWORDS
+from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from tokenization_jieba import tokenization
-from lib import Messages, download_resource, process_cache, Action
-from preprocess.conversation_backup import preprocess
+from backend.lib import download_resource
+from backend.preprocess.conversation_backup import preprocess
 
 # def usage():
 #     pass

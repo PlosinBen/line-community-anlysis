@@ -1,8 +1,9 @@
 import sys
 import re
 import os
-from lib.message import Messages
-import getopt
+from backend.lib import Messages
+
+
 # from word_cloud import WordCloudAction
 #
 # actions = dict(
@@ -38,7 +39,7 @@ def write_file(msg: Messages):
 
 
 if __name__ == '__main__':
-    filename = 'record2-copy.txt'
+    filename = '../record2-copy.txt'
     if len(sys.argv) > 1:
         filename = sys.argv[1]
 

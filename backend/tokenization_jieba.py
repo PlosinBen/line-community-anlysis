@@ -1,7 +1,7 @@
 import jieba
 import jieba.analyse
 from collections import Counter
-from lib import download_resource
+from backend.lib import download_resource
 
 
 class TokenizationResult:
