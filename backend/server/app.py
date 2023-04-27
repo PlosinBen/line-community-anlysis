@@ -7,10 +7,9 @@ app = Flask(__name__)
 
 prefix = '/api'
 
-#inject controller
-app.register_blueprint(text_statistics, url_prefix = prefix)
-app.register_blueprint(word_cloud, url_prefix = prefix)
-
+# inject controller
+app.register_blueprint(text_statistics, url_prefix=prefix)
+app.register_blueprint(word_cloud, url_prefix=prefix)
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug=True)
