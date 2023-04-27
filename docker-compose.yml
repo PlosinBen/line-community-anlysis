@@ -1,9 +1,30 @@
 version: "3.9"
 
 services:
-  python:
-    build: ./docker
+  backend:
+    build:
+      dockerfile: ./backend.Dockerfile
     volumes:
       ### app code
-      - .:/app
-    entrypoint: [ "tail", "-f", "/dev/null" ]
+      - ./backend:/app
+    working_dir: /app/server
+    entrypoint: [ "flask", "run", "--host", "0.0.0.0" ]
+    #    entrypoint: [ "tail", "-f", "/dev/null" ]
+
+  frontend:
+    image: node:18
+    volumes:
+      - ./frontend:/app/frontend
+    working_dir: '/app/frontend'
+    entrypoint: [ "sh", "/app/frontend/entrypoint.sh" ]
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx:/etc/nginx/templates
+    links:
+      #      - frontend
+      - backend
+    #      - backend
+    ports:
+      - "8080:8080"
