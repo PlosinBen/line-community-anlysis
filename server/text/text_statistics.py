@@ -4,7 +4,7 @@ text_statistics= Blueprint('text_statistics', __name__)
 
 # path
 
-@text_statistics.route('/')
+@text_statistics.route('/statistics')
 def statistics():
     return 'statistics'
 
