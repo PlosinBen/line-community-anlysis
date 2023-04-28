@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-text_statistics= Blueprint('text_statistics', __name__)
+text_statistics = Blueprint('text_statistics', __name__)
 
 # path
 
