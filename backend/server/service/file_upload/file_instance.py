@@ -7,6 +7,6 @@ class file_instance:
     def getFile(self):
         return self.file
     
-    @get.setter
+    @getFile.setter
     def setFile(self, file):
         self.file = file

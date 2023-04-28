@@ -1,8 +1,8 @@
 from flask import Flask
 
-from .server.text.text_statistics_path import text_statistics
-from .server.word.word_cloud_path import word_cloud
-from .server.file_upload.file_upload_path import file_upload
+from .server.controller.text.text_statistics_path import text_statistics
+from .server.controller.word.word_cloud_path import word_cloud
+from .server.controller.file.file_upload_path import file_upload
 
 app = Flask(__name__)
 
