@@ -1,12 +1,12 @@
-import { defineConfig } from 'vite'
+import {defineConfig} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 import * as path from 'path'
-import { ManifestOptions, VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
+import {ManifestOptions, VitePWA, VitePWAOptions} from 'vite-plugin-pwa'
 import replace from '@rollup/plugin-replace'
-import { createHtmlPlugin } from 'vite-plugin-html'
+import {createHtmlPlugin} from 'vite-plugin-html'
 import VueI18n from '@intlify/unplugin-vue-i18n/vite'
 import Unocss from 'unocss/vite'
 
@@ -116,8 +116,9 @@ export default defineConfig({
   server: {
     port: 8080,
     hmr: {
-      host: '127.0.0.1',
-      port: 8080,
+      path: "/socket",
+      port: 8888,
+      clientPort: 8080
     },
   },
 })
