@@ -12,7 +12,7 @@
     "commit": "git-cz",
     "release": "npx bumpp --push --tag --commit 'release: v'",
     "postinstall": "npx msw init public --save",
-    "prepare": "husky install"
+    "prepare": "cd .. && husky install frontend/.husky"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.4",
@@ -20,7 +20,11 @@
     "@vueuse/core": "^8.9.4",
     "@vueuse/integrations": "^8.9.4",
     "axios": "^0.27.2",
+    "chart.js": "^4.3.0",
     "element-plus": "^2.3.0",
+    "jieba-zh-tw": "^1.0.12",
+    "js-jieba": "^1.0.12",
+    "moment": "^2.29.4",
     "pinia": "^2.0.33",
     "universal-cookie": "^4.0.4",
     "vue": "^3.2.47",
@@ -53,7 +57,7 @@
     "eslint-plugin-vue": "^8.7.1",
     "husky": "^8.0.3",
     "lint-staged": "^12.5.0",
-    "msw": "^0.40.2",
+    "msw": "^1.2.1",
     "postcss": "^8.4.21",
     "postcss-scss": "^4.0.6",
     "prettier": "^2.8.4",

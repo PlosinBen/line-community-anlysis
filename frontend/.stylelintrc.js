@@ -6,7 +6,7 @@ module.exports = {
     ],
     customSyntax: 'postcss-scss',
     rules: {
-        indentation: 4,
+        indentation: 2,
         'string-quotes': 'single',
         'scss/dollar-variable-pattern': null,
     },
