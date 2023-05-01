@@ -1,8 +1,8 @@
 import { isDark, toggleDark } from '@/composables'
-import { useDark, useToggle } from '@vueuse/core'
+// import { useDark, useToggle } from '@vueuse/core'
 
 export function updateTheme() {
-  if (isDark) {
+  if (isDark.value) {
     toggleDark()
   }
   // if (useDark()) {
