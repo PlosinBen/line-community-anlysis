@@ -1,7 +1,7 @@
 <template>
-  <div class="w-1/2">
-    <canvas ref="canvasRef"></canvas>
-  </div>
+  <canvas ref="canvasRef"></canvas>
+  <!-- <div class="w-3/4"> -->
+  <!-- </div> -->
 </template>
 
 <script setup lang="ts">

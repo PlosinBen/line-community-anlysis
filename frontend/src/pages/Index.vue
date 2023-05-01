@@ -1,47 +1,20 @@
 <template>
-  <div class="flex flex-col">
-    <div>
+  <div class="flex flex-col overflow-hidden">
+    <div class="flex items-center">
       <input ref="uploadRef" type="file" class="board p-1 w-60 mr-2" />
       <el-button type="primary" @click="onReadFile">讀取檔案</el-button>
-    </div>
-    <div v-if="parseResult" class="flex flex-col my-2">
-      <div class="my-2 flex">
-        <div class="mx-2">
-          功能選擇:
-          <select v-model="functionSelect" class="border px-2 py-1 rounded ml-2">
-            <option>每日訊息統計</option>
-          </select>
-        </div>
-        <div class="mx-2">
-          <label v-for="option in filterOptions" :key="option.key" class="block">
-            {{ option.label }}
-            <input v-model="filterSetting[option.key]" type="checkbox" />
-          </label>
-        </div>
-        <div class="mx-2">
-          <el-button type="success" @click="dayCountChartRef?.draw()">圖表繪製</el-button>
-        </div>
-      </div>
-    </div>
-    <div v-if="false" class="flex flex-col my-2">
-      <div class="my-2">
-        日期:<select class="border px-2 py-1 rounded ml-2">
-          <option v-for="(day, i) in allMessageDay" :key="i">
-            {{ day }}
-          </option>
-        </select>
-      </div>
-      <div class="my-2">
-        聊天成員清單:
-        <select class="border px-2 py-1 rounded ml-2">
-          <option v-for="(member, i) in allMembers" :key="i">
-            {{ member }}
-          </option>
+      <div v-if="parseResult" class="mx-2">
+        功能選擇:
+        <select v-model="functionSelect" class="border px-2 py-1 rounded ml-2">
+          <option>每日訊息統計</option>
+          <!-- <option>單日訊息統計</option> -->
+          <option>查詢賢達訊息</option>
         </select>
       </div>
     </div>
-    <div v-if="parseResult" class="flex flex-col my-2">
-      <day-count-chart ref="dayCountChartRef" :data="parseResult" :filter="filterSetting"></day-count-chart>
+    <div v-if="parseResult" class="grow h-full overflow-hidden">
+      <all-day-count v-if="functionSelect === '每日訊息統計'" :data="parseResult"></all-day-count>
+      <search-member-message v-if="functionSelect === '查詢賢達訊息'" :data="parseResult"></search-member-message>
     </div>
   </div>
   <!-- <img alt="Vue logo" src="@/assets/images/logo.png" class="w-30" /> -->
@@ -50,9 +23,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { IParseMessageResult, ICountFilterOption } from '@/types/message'
+import type { IParseMessageResult, ICountFilterOption, IMessage } from '@/types/message'
 import { computed, ref } from 'vue'
 import { parserMessage } from '@/utils/message'
+import AllDayCount from './home/AllDayCount.vue'
+import SearchMemberMessage from './home/SearchMemberMessage.vue'
 import DayCountChart from '@/components/DayCountChart.vue'
 // import type { UploadInstance } from 'element-plus'
 
@@ -62,37 +37,7 @@ const parseResult = ref<IParseMessageResult | null>(null)
 
 const functionSelect = ref<string>('每日訊息統計')
 
-const filterSetting = ref<ICountFilterOption>({
-  chartRoomSetting: false,
-  forceRemoveMember: false,
-  joinOrLeaveGroup: false,
-  autoReplyMessage: false,
-  systemForceRemoveMessage: false,
-  revokeMessage: false,
-  stickerMessage: false,
-  photoMessage: false,
-  videoMessage: false,
-  generalMessage: true,
-})
-
-const filterOptions = [
-  { label: '群組設定', key: 'chartRoomSetting' },
-  { label: '強制移除成員', key: 'forceRemoveMember' },
-  { label: '成員加入/離開', key: 'joinOrLeaveGroup' },
-  { label: '自動回應訊息', key: 'autoReplyMessage' },
-  { label: '系統回收訊息', key: 'systemForceRemoveMessage' },
-  { label: '回收訊息', key: 'revokeMessage' },
-  { label: '貼圖訊息', key: 'stickerMessage' },
-  { label: '照片訊息', key: 'photoMessage' },
-  { label: '影片訊息', key: 'videoMessage' },
-  { label: '一般聊天訊息', key: 'generalMessage' },
-]
-
 const allMessageString = ref<string>('')
-
-const allMessageDay = computed(() => {
-  return parseResult.value && parseResult.value.dayMessages.map((d) => d.dayText)
-})
 
 const allMembers = computed(() => {
   let result = null

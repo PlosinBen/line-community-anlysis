@@ -14,20 +14,20 @@ const date = '__DATE__'
 const timeAgo = useTimeAgo(date)
 </script>
 <template>
-  <el-container class="h-screen">
+  <el-container class="h-screen overflow-hidden">
     <el-header>
       <Header />
     </el-header>
-    <el-main class="main">
+    <el-main class="main overflow-hidden">
       <RouterView />
       <!-- <br />
       <ServiceWorker />
       <br />
       <div>Built at: {{ date }} ({{ timeAgo }})</div> -->
     </el-main>
-    <el-footer>
+    <!-- <el-footer>
       <Footer />
-    </el-footer>
+    </el-footer> -->
   </el-container>
   <ReloadPrompt />
 </template>
