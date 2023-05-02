@@ -8,6 +8,7 @@ server {
     listen 8080;
 
     location /api {
+        client_max_body_size 100M;
         proxy_pass http://backend:5000;
     }
 

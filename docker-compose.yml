@@ -7,9 +7,11 @@ services:
     volumes:
       ### app code
       - ./backend:/app
-    working_dir: /app/server
-    entrypoint: [ "flask", "run", "--host", "0.0.0.0" ]
-    #    entrypoint: [ "tail", "-f", "/dev/null" ]
+    working_dir: /app
+    env_file:
+      - .env
+#    entrypoint: [ "flask", "run", "--host", "0.0.0.0" ]
+    entrypoint: [ "tail", "-f", "/dev/null" ]
 
   frontend:
     image: node:18

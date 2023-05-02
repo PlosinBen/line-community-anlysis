@@ -1,7 +1,7 @@
 from pathlib import Path
-from backend.preprocess.conversation_backup import preprocess
+from ....preprocess.conversation_backup import preprocess
 from sys import argv
-from backend.lib import Message
+from ....core.lib import Message, Messages
 from datetime import datetime, timedelta
 
 
@@ -56,13 +56,26 @@ class Statistics:
         self.date_statistics.increase(message.date)
         self.user_statistics.increase(message.name)
 
-        if msg.is_sticker_message():
+        if message.is_sticker_message():
             self.user_sticker_statistics.increase(message.name)
 
         if self.date_user_statistics.get(message.date) is None:
             self.date_user_statistics[message.date] = StatisticsGroup()
 
         self.date_user_statistics.get(message.date).increase(message.name)
+
+    def get_result(self) -> dict:
+
+        return dict(
+            number_of_message=self.total_message,
+            number_of_spoken_user=len(self.date_user_statistics),
+            number_of_sys_message=self.sys_message,
+            number_of_user_message=self.user_message,
+            average_of_messages_by_spoken_user=self.user_message / len(self.date_user_statistics),
+
+            ranking_of_user_message=[(element.key, element.num) for element in self.user_statistics.get_top(5)],
+            ranking_of_user_sticker=[(element.key, element.num) for element in self.user_sticker_statistics.get_top(5)],
+        )
 
     def print_result(self):
         print("總訊息數: {:,}\t 發言使用者: {:,}\t 使用者訊息數: {:,}\t 發言使用者平均訊息數: {:,.1f}".format(
@@ -99,28 +112,35 @@ class Statistics:
                 print()
 
 
-filepath = Path(argv[1])
+def get_basic_statistics(messages: Messages) -> Statistics:
+    statistics = Statistics()
+    for msg in messages.data:
+        statistics.increase_dialogue(msg)
 
-output = {
-    'total_message'
-}
+    return statistics
 
-if not filepath.is_file():
-    print("file {} not exists".format(argv[1]))
-    exit(0)
 
-messages = preprocess(filepath)
+if __name__ == '__main__':
+    filepath = Path(argv[1])
 
-message_count = len(messages.data)
-user_message_count = len(messages.data)
-messages = messages.filter(lambda msg: msg.is_user_message())
+    output = {
+        'total_message'
+    }
 
-statistics = Statistics()
-for msg in messages.data:
-    statistics.increase_dialogue(msg)
+    if not filepath.is_file():
+        print("file {} not exists".format(argv[1]))
+        exit(0)
 
-print()
-print(messages.title.strip())
-print(messages.version.strip())
+    messages = preprocess(filepath)
 
-statistics.print_result()
+    message_count = len(messages.data)
+    user_message_count = len(messages.data)
+    messages = messages.filter(lambda msg: msg.is_user_message())
+
+    statistics = get_basic_statistics(messages)
+
+    print()
+    print(messages.title.strip())
+    print(messages.version.strip())
+
+    statistics.print_result()
