@@ -1,12 +1,13 @@
 /* @tailwind base; */
 @import './reset';
+@import '~bootstrap/scss/bootstrap';
 
 a,
 a:active,
 a:visited {
-    color: var(--el-primary-color);
+  color: var(--el-primary-color);
 }
 
 :root {
-    --link-color: #42b983;
+  --link-color: #42b983;
 }

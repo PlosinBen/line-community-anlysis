@@ -1,9 +1,9 @@
 import moment from 'moment'
-import createJieba from 'js-jieba'
-import { JiebaDict, HMMModel, UserDict, IDF, StopWords } from 'jieba-zh-tw'
+// import createJieba from 'js-jieba'
+// import { JiebaDict, HMMModel, UserDict, IDF, StopWords } from 'jieba-zh-tw'
 import { type ICountFilterOption, type IDayMessages, type IMessage, type IParseMessageResult } from '@/types/message'
 
-const jieba = createJieba(JiebaDict, HMMModel, UserDict, IDF, StopWords)
+// const jieba = createJieba(JiebaDict, HMMModel, UserDict, IDF, StopWords)
 enum eMessageType {
   ChatRoomSetting = 'ChatRoomSetting',
   ForceRemoveMember = 'ForceRemoveMember',
@@ -233,6 +233,6 @@ export function concatAllMessagesToString(messages: Array<IMessage>) {
     .join('\n')
 }
 
-export function extractAllMessageByJieba(messageString: string, topk = 10) {
-  return jieba.extract(messageString, topk)
-}
+// export function extractAllMessageByJieba(messageString: string, topk = 10) {
+//   return jieba.extract(messageString, topk)
+// }

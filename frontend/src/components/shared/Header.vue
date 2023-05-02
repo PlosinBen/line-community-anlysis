@@ -1,19 +1,19 @@
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n'
-import LoginButton from '../LoginButton.vue'
-import ThemeSwitcher from '../ThemeSwitcher.vue'
-import LangSwitcher from '../LangSwitcher.vue'
-import Menu from '../Menu.vue'
-
-const { t } = useI18n()
+// import { useI18n } from 'vue-i18n'
+// import LoginButton from '../LoginButton.vue'
+// import ThemeSwitcher from '../ThemeSwitcher.vue'
+// import LangSwitcher from '../LangSwitcher.vue'
+// import Menu from '../Menu.vue'
+const title = '__TITLE__'
+// const { t } = useI18n()
 </script>
 <template>
   <nav class="header-nav flex flex-row justify-center items-center">
     <div class="nav-left flex flex-row justify-between items-center">
-      <router-link to="/" class="flex justify-center items-center">
+      <span clspanss="flex justify-center items-center" href="/">
         <img alt="Vue logo" src="@/assets/images/logo.png" class="logo" />
-        <span class="mx-2 text-xl">探吉教 LINE 群組訊息分析</span>
-      </router-link>
+        <span class="mx-2 text-xl">{{ title }}</span>
+      </span>
       <!-- <Menu /> -->
     </div>
     <h3 class="title text-3xl font-medium text-primary-dark dark:text-ternary-light hidden sm:block">

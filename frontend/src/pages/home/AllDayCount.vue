@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-full overflow-y-auto relative">
-    <div class="flex">
+    <div class="flex px-5">
       <div class="mx-2">
         <label v-for="option in filterOptions" :key="option.key" class="block">
           {{ option.label }}
@@ -11,7 +11,7 @@
         <el-button type="success" @click="dayCountChartRef?.draw()">圖表繪製</el-button>
       </div>
     </div>
-    <div v-if="props.data" class="grow h-full">
+    <div v-if="props.data" class="grow h-full pl-5">
       <day-count-chart ref="dayCountChartRef" :data="props.data" :filter="filterSetting"></day-count-chart>
     </div>
   </div>
