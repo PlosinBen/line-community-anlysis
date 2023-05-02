@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 from backend.core.conversation_message import parse_to_message, get_name_version
-from backend.core.exception.error_exception import FileProcessing, FileNotExistsException
+from backend.core.error_exception import FileProcessing, FileNotExistsException
 from backend.core.lib import Messages, config
 from backend.service.text.report import get_basic_statistics
 import pickle
