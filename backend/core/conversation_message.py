@@ -1,15 +1,21 @@
+import logging
 from pathlib import Path
-from lib import Messages, Message, Rules, Rule
+from .lib import Messages, Message, Rules, Rule
 import re
+from flask import current_app as app
+
+
+class FileHeaderNotMatch(Exception):
+    pass
 
 
 def _init_rules() -> Rules:
     return Rules([
-        Rule(  # 系統日期
-            msg_group=Message.SYSTEM_GROUP,
-            msg_type='date',
-            regex=r'^(\d{2}\:\d{2})\t(.+)\t(.+)\n$'
-        ),
+        # Rule(  # 系統日期
+        #     msg_group=Message.SYSTEM_GROUP,
+        #     msg_type='date',
+        #     regex=r'^(\d{4}\/\d{2}\/\d{2})（\w）\n$'
+        # ),
         Rule(
             msg_group=Message.SYSTEM_GROUP,
             msg_type=Message.SYSTEM_ADMIN_OPERATE,
@@ -48,24 +54,28 @@ def _init_rules() -> Rules:
     ])
 
 
-def get_file_version(filepath: Path) -> str:
+def get_name_version(filepath: Path) -> tuple[str, str] | None:
     with filepath.open() as file_object:
-        return '{}-{}'.format(
-            re.match(f'^\[LINE\] (.+)的聊天', file_object.readline()).groups()[0],
-            ''.join(re.findall(r'\d+', file_object.readline()))
-        )
+        group_name_match = re.match(r'^\[LINE\] (.+)的聊天\n$', file_object.readline())
+        save_date_match = re.match(r'^儲存日期\： (\d{4})\/(\d{2})\/(\d{2}) (\d{2})\:(\d{2})', file_object.readline())
+
+        if group_name_match is None or save_date_match is None:
+            raise FileHeaderNotMatch
+
+        return group_name_match.groups()[0], ''.join(save_date_match.groups())
 
 
 def parse_to_message(filepath: Path) -> Messages:
+    title, version = get_name_version(filepath)
+
     with filepath.open() as file_object:
-        messages = Messages(
-            file_object.readline(),
-            file_object.readline()
-        )
+        messages = Messages(title, version)
 
         rules = _init_rules()
 
-        file_object.readline()
+        for _ in range(3):
+            next(file_object)
+
         for line in file_object:
             # message date
 
@@ -77,9 +87,9 @@ def parse_to_message(filepath: Path) -> Messages:
             match_rule = rules.match(line)
             if match_rule is not None:
                 messages.push(
-                    msg_group=match_rule.msg_group,
-                    msg_type=match_rule.msg_type,
-                    date=message_date,
+                    match_rule.msg_group,
+                    match_rule.msg_type,
+                    message_date,
                     *match_rule.match_groups
                 )
             else:

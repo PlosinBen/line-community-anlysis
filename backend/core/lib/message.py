@@ -53,6 +53,7 @@ class Messages:
     def __init__(self, title: str, version: str, data: list[Message] = None):
         self.title: str = title
         self.version = version
+        self.hash: str | None = None
         self.data: list[Message] = [] if data is None or len(data) == 0 else data
 
     @staticmethod

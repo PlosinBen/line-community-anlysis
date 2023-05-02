@@ -1,4 +1,5 @@
 import re
+from flask import current_app as app
 
 
 class Rule:
