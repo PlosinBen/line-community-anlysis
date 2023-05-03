@@ -1,6 +1,7 @@
-from backend.lib import Messages, Message, process_cache
 from pathlib import Path
 import re
+
+from backend.core.lib import Messages, Message, process_cache
 
 
 def load_file_version(filepath: Path) -> str:
