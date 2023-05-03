@@ -44,7 +44,7 @@ class Config:
         return target
 
     def get_analysis_path(self) -> Path:
-        return self._create_path(self.data_path, 'mapping')
+        return self._create_path(self.data_path, 'analysis')
 
     def get_message_path(self) -> Path:
         return self._create_path(self.message_data_path)

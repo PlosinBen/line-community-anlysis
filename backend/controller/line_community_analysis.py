@@ -1,3 +1,4 @@
+import logging
 from os import getenv
 import random
 import string
@@ -5,6 +6,7 @@ from flask import Blueprint, request, jsonify
 from pathlib import Path
 from backend.service.text import line_community
 from backend.core.lib.config import config
+from backend.core import error_exception
 
 line_community_analysis = Blueprint('line_community_analysis', __name__)
 
@@ -49,9 +51,9 @@ def get_basic_analysis(hash_name: str):
         return jsonify(
             analysis=line_community.analysis(hash_name)
         )
-    except line_community.FileNotExistsException:
+    except error_exception.FileNotExistsException:
         return '', 404
-    except line_community.FileProcessing:
+    except error_exception.FileProcessing:
         return jsonify(
             status='processing'
         )

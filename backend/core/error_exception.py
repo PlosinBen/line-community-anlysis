@@ -1,6 +1,6 @@
-class FileProcessing:
+class FileProcessing(BaseException):
     pass
 
 
-class FileNotExistsException:
+class FileNotExistsException(BaseException):
     pass

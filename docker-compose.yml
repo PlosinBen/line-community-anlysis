@@ -2,13 +2,13 @@ version: "3.9"
 
 services:
   backend:
-    image: tan-gi-py:0.1
+    image: tan-gi-py:10.1
     build:
       dockerfile: ./backend.Dockerfile
     volumes:
       ### app code
-      - ./backend:/app
-    working_dir: /app
+      - ./backend:/app/backend
+    working_dir: /app/backend
     env_file:
       - .env
 #    entrypoint: [ "flask", "run", "--host", "0.0.0.0" ]
