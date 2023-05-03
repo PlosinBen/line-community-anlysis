@@ -1,19 +1,21 @@
 from os import getenv
 import random
 import string
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, jsonify
 from pathlib import Path
-from ..service import line_community
-from ...core.lib.config import config
+from backend.service.text import line_community
+from backend.core.lib.config import config
 
 line_community_analysis = Blueprint('line_community_analysis', __name__)
+
+analysis_prefix = '/analysis'
 
 
 def _get_random_string(length: int = 10) -> str:
     return ''.join(random.choice(string.ascii_letters + string.digits) for x in range(10))
 
 
-@line_community_analysis.route('/line_community_analysis', methods=['POST'])
+@line_community_analysis.route(analysis_prefix, methods=['POST'])
 def upload_line_community_file():
     file_column_name = 'file'
     if file_column_name not in request.files or request.files[file_column_name].filename == '':
@@ -41,7 +43,7 @@ def upload_line_community_file():
     )
 
 
-@line_community_analysis.get('/line_community_analysis/<hash_name>')
+@line_community_analysis.get(analysis_prefix + '/<hash_name>')
 def get_basic_analysis(hash_name: str):
     try:
         return jsonify(
@@ -55,7 +57,7 @@ def get_basic_analysis(hash_name: str):
         )
 
 
-@line_community_analysis.get('/line_community_analysis/<hash_name>/chart')
+@line_community_analysis.get(analysis_prefix + '/<hash_name>/chart')
 def chart(hash_name: str):
     try:
         return jsonify(
@@ -65,6 +67,6 @@ def chart(hash_name: str):
         return None, 404
 
 
-@line_community_analysis.get('/line_community_analysis/<hash_name>/world_cloud')
+@line_community_analysis.get(analysis_prefix + '/<hash_name>/world_cloud')
 def word_cloud(hash_name: str):
     pass

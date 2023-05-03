@@ -1,32 +1,11 @@
 import logging
 from pathlib import Path
-from hashlib import md5
-from os import getenv
-import re
-from ...core.conversation_message import parse_to_message, get_name_version
-from ...core.lib import Messages, config
-from .text.report import get_basic_statistics
+from backend.core.conversation_message import parse_to_message, get_name_version
+from backend.core.error_exception import FileProcessing, FileNotExistsException
+from backend.core.lib import Messages, config
+from backend.service.text.report import get_basic_statistics
 import pickle
-from flask import current_app as app
-from ...repository.message import MessageRepository
-
-
-class FileNotExistsException(Exception):
-    pass
-
-
-class FileHeaderNotMatch(Exception):
-    pass
-
-
-class FileProcessing(Exception):
-    pass
-
-
-class TestException(Exception):
-    def __init__(self, msg: str):
-        self.msg = msg
-        pass
+from backend.repository.message import MessageRepository
 
 
 def analysis(hash_name: str) -> dict:
