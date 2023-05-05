@@ -10,7 +10,7 @@
 
 ##### path
 ```
-POST /analysis
+POST /api/analysis
 ```
 
 #### Response
@@ -24,7 +24,7 @@ POST /analysis
 
 #### Request
 ```
-POST /analysis/<hash>
+POST /api/analysis/<hash>
 ```
 #### Response
 ```
@@ -79,6 +79,43 @@ POST /analysis/<hash>
                 642
             ]
         ]
+    }
+}
+```
+
+### 風險評價計算
+
+#### Request
+```
+GET /api/risk
+```
+#### query parameter
+```
+start_date: YYYY-MM-DD
+end_date: YYYY-MM-DD
+asset[]: 標的代號 ex: QQQ, SPY
+period[]: 計算週期 ex:8, 10, 200
+
+example
+start_date=2015-01-01&end_date=2023-05-05&asset[]=QQQ&asset[]=SPY&asset[]=TLT&period[]=8&period[]=10&asset[]=SMH&asset[]=IWM
+```
+
+#### Response
+```
+{
+    "10": {
+        "IWM": 0.17202524916311449,
+        "QQQ": 0.17214714355907348,
+        "SMH": 0.16739940305795112,
+        "SPY": 0.18231924506796843,
+        "TLT": 0.30610895915189257
+    },
+    "8": {
+        "IWM": 0.17177344217466417,
+        "QQQ": 0.16771423201818084,
+        "SMH": 0.1661925918592342,
+        "SPY": 0.18143739346377075,
+        "TLT": 0.31288234048415003
     }
 }
 ```
