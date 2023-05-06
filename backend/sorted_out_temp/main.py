@@ -1,7 +1,8 @@
 import sys
 import re
 import os
-from backend.lib import Messages
+
+from backend.core.lib import Messages
 
 
 # from word_cloud import WordCloudAction

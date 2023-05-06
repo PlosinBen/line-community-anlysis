@@ -1,8 +1,7 @@
-import logging
-from pathlib import Path
-from .lib import Messages, Message, Rules, Rule
 import re
-from flask import current_app as app
+from pathlib import Path
+
+from .lib import Messages, Message, Rules, Rule
 
 
 class FileHeaderNotMatch(Exception):

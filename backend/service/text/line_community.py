@@ -1,53 +1,34 @@
 import logging
 from pathlib import Path
-from hashlib import md5
-from os import getenv
-import re
-from ...core.conversation_message import parse_to_message, get_name_version
-from ...core.lib import Messages, config
-from .text.report import get_basic_statistics
+from backend.core.conversation_message import parse_to_message, get_name_version
+from backend.core.error_exception import FileProcessing, FileNotExistsException
+from backend.core.lib import Messages, config
+from backend.service.text.report import get_basic_statistics
 import pickle
-from flask import current_app as app
-from ...repository.message import MessageRepository
-
-
-class FileNotExistsException(Exception):
-    pass
-
-
-class FileHeaderNotMatch(Exception):
-    pass
-
-
-class FileProcessing(Exception):
-    pass
-
-
-class TestException(Exception):
-    def __init__(self, msg: str):
-        self.msg = msg
-        pass
+from backend.repository.message import MessageRepository
 
 
 def analysis(hash_name: str) -> dict:
     analysis_path = config.get_analysis_path() / hash_name
 
-    if analysis_path.exists():
+    if analysis_path.is_file():
         analysis_data = pickle.loads(
             analysis_path.read_bytes()
         )
 
-        if analysis_data is FileProcessing:
+        if isinstance(analysis_data, FileProcessing):
             raise FileProcessing
 
     else:
+        messages = get_message_data(hash_name)
+
         analysis_path.write_bytes(
             pickle.dumps(FileProcessing())
         )
 
-        analysis_data = get_basic_statistics(
-            get_message_data(hash_name)
-        ).get_result()
+        analysis_data = get_basic_statistics(messages).get_result()
+
+        analysis_path.unlink()
 
         analysis_path.write_bytes(
             pickle.dumps(analysis_data)
