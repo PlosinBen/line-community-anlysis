@@ -45,6 +45,16 @@ const routes: Array<RouteRecordRaw> = [
     },
     component: () => import('@/pages/FrontendAnalysisPage/Index.vue'),
   },
+  {
+    path: '/risk-assessment',
+    name: '風險評價計算',
+    meta: {
+      title: 'Risk Assessment',
+      keepAlive: true,
+      requireAuth: false,
+    },
+    component: () => import('@/pages/RiskAssessmentPage/Index.vue'),
+  },
 ]
 
 const router = createRouter({
@@ -52,11 +62,12 @@ const router = createRouter({
   routes,
 })
 
-// router.beforeEach(async (to, from) => {
-//     const token = getToken();
-//     if (!token && to.name !== 'Index') {
-//         return { name: 'Index' };
-//     }
-// });
+router.beforeEach(async (to, from) => {
+  console.log(to, from)
+  // const token = getToken();
+  // if (!token && to.name !== 'Index') {
+  //     return { name: 'Index' };
+  // }
+})
 
 export { router }

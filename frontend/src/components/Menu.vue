@@ -20,6 +20,8 @@ import { Menu as IconMenu, HomeFilled, ArrowDown } from '@element-plus/icons-vue
         <router-link class="menu-item" to="/analysis">
           <el-dropdown-item :icon="IconMenu"> 上傳檔案分析群組訊息 </el-dropdown-item>
         </router-link>
+        <router-link class="menu-item" to="/risk-assessment">
+          <el-dropdown-item :icon="IconMenu"> 風險評價計算 </el-dropdown-item>
         </router-link>
       </el-dropdown-menu>
     </template>
