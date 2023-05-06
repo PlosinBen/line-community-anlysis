@@ -4,7 +4,7 @@ import { Menu as IconMenu, HomeFilled, ArrowDown } from '@element-plus/icons-vue
 <template>
   <el-dropdown class="menu-list">
     <span class="el-dropdown-link cursor-pointer text-lg font-medium text-primary-dark dark:text-ternary-light">
-      Menus
+      功能選單
       <el-icon class="el-icon--right">
         <arrow-down />
       </el-icon>
@@ -14,8 +14,12 @@ import { Menu as IconMenu, HomeFilled, ArrowDown } from '@element-plus/icons-vue
         <router-link class="menu-item" to="/">
           <el-dropdown-item :icon="HomeFilled"> Home </el-dropdown-item>
         </router-link>
-        <router-link class="menu-item" to="/detail">
-          <el-dropdown-item :icon="IconMenu"> Detail </el-dropdown-item>
+        <router-link class="menu-item" to="/frontend-analysis">
+          <el-dropdown-item :icon="IconMenu"> 前端分析群組訊息 </el-dropdown-item>
+        </router-link>
+        <router-link class="menu-item" to="/analysis">
+          <el-dropdown-item :icon="IconMenu"> 上傳檔案分析群組訊息 </el-dropdown-item>
+        </router-link>
         </router-link>
       </el-dropdown-menu>
     </template>

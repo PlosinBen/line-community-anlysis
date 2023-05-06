@@ -28,8 +28,7 @@ import Home from '@/pages/Index.vue'
       <Header />
     </el-header>
     <el-main class="main overflow-hidden">
-      <Home></Home>
-      <!-- <RouterView /> -->
+      <RouterView />
       <!-- <br />
       <ServiceWorker />
       <br />

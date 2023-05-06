@@ -14,7 +14,7 @@ const title = '__TITLE__'
         <img alt="Vue logo" src="@/assets/images/logo.png" class="logo" />
         <span class="mx-2 text-xl">{{ title }}</span>
       </span>
-      <!-- <Menu /> -->
+      <Menu />
     </div>
     <h3 class="title text-3xl font-medium text-primary-dark dark:text-ternary-light hidden sm:block">
       <!-- Vue3 + TypeScript + Vite {{ t('common.template') }} -->

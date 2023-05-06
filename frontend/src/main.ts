@@ -1,9 +1,10 @@
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
+import zhTw from 'element-plus/dist/locale/zh-tw.mjs'
 
 import App from './App.vue'
 // import { store } from './store'
-// import { router } from './router'
+import { router } from './router'
 // import { i18n } from './i18n'
 import { updateTheme } from './utils/theme'
 
@@ -23,8 +24,10 @@ async function main() {
 
   // load plugins
   // app.use(store)
-  // app.use(router)
-  app.use(ElementPlus)
+  app.use(router)
+  app.use(ElementPlus, {
+    locale: zhTw,
+  })
   // app.use(i18n)
 
   app.mount('#app')

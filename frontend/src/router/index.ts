@@ -12,6 +12,39 @@ const routes: Array<RouteRecordRaw> = [
     },
     component: () => import('@/pages/Index.vue'),
   },
+  {
+    path: '/analysis',
+    name: '上傳分析檔案',
+    meta: {
+      title: 'Analysis',
+      keepAlive: true,
+      requireAuth: false,
+    },
+    component: () => import('@/pages/BackendUploadPage/Index.vue'),
+    children: [
+      {
+        path: ':hash',
+        name: '上傳檔案分享',
+        meta: {
+          title: 'Analysis Result',
+          keepAlive: true,
+          requireAuth: false,
+        },
+        props: true,
+        component: () => import('@/pages/BackendUploadPage/AnalysisResult.vue'),
+      },
+    ],
+  },
+  {
+    path: '/frontend-analysis',
+    name: '前端分析',
+    meta: {
+      title: 'Frontend Analysis',
+      keepAlive: true,
+      requireAuth: false,
+    },
+    component: () => import('@/pages/FrontendAnalysisPage/Index.vue'),
+  },
 ]
 
 const router = createRouter({
