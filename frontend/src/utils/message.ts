@@ -1,9 +1,6 @@
 import moment from 'moment'
-// import createJieba from 'js-jieba'
-// import { JiebaDict, HMMModel, UserDict, IDF, StopWords } from 'jieba-zh-tw'
 import { type ICountFilterOption, type IDayMessages, type IMessage, type IParseMessageResult } from '@/types/message'
 
-// const jieba = createJieba(JiebaDict, HMMModel, UserDict, IDF, StopWords)
 enum eMessageType {
   ChatRoomSetting = 'ChatRoomSetting',
   ForceRemoveMember = 'ForceRemoveMember',
@@ -17,10 +14,30 @@ enum eMessageType {
   GeneralMessage = 'GeneralMessage',
 }
 
-export function parserMessage(rawData: string[]): IParseMessageResult {
+export async function sleep(t: number) {
+  return new Promise((resolve) => setTimeout(resolve, t * 1000))
+}
+
+const fileHeaderTitleRegex = /\[LINE\] (.+)的聊天(記錄)?/
+const fileHeaderSaveTime = /儲存日期\：\s?(\d{4})\/(\d{2})\/(\d{2}) (\d{2})\:(\d{2})/
+
+export function checkFileHeader(title: string) {
+  const result = {
+    validity: false,
+    isIOS: false,
+  }
+  result.validity = fileHeaderTitleRegex.test(title)
+  if (result.validity) {
+    const regexResult = fileHeaderTitleRegex.exec(title) as RegExpExecArray
+    result.isIOS = !regexResult[2]
+  }
+  return result
+}
+
+export function parserMessage(rawData: string[], callback?: (persent: string) => void): IParseMessageResult {
   const dataLength = rawData.length
-  const test = rawData.slice(0, 100)
-  const title = test[0]
+  // const test = rawData.slice(0, 100)
+  const title = rawData[0]
   const storeAt = rawData[1]
 
   const userSets = new Set<string>()
@@ -33,8 +50,11 @@ export function parserMessage(rawData: string[]): IParseMessageResult {
   })
   let i = 3
   console.time('parser message')
-  while (i < dataLength) {
+  console.log(dataLength)
+
+  for (; i < dataLength; ) {
     const currentMsg = rawData[i]
+
     let currentRule
     for (let j = 0; j < messageRegex.length; j++) {
       if (messageRegex[j].regex.test(currentMsg)) {
@@ -102,19 +122,6 @@ export function parserMessage(rawData: string[]): IParseMessageResult {
   console.log(dayMessages)
   console.timeEnd('parser message')
 
-  // console.log(test)
-  // const messages = test.map((line) => {
-  //   const currentRule = messageRegex.find((rule) => rule.regex.test(line))
-  //   if (currentRule) {
-  //     console.log(currentRule.name)
-  //     return currentRule.regex.exec(line)
-  //   } else {
-  //     console.log('not match')
-  //     return []
-  //   }
-  // })
-  // console.log(messages)
-
   return {
     title,
     storeAt,
@@ -123,10 +130,10 @@ export function parserMessage(rawData: string[]): IParseMessageResult {
   }
 }
 
-export function parserMessageAsync(rawData: string[]): Promise<IParseMessageResult> {
+export function parserMessageAsync(rawData: string[], callback?: (persent: string) => void): Promise<IParseMessageResult> {
   return new Promise((resolve, reject) => {
     try {
-      resolve(parserMessage(rawData))
+      resolve(parserMessage(rawData, callback))
     } catch (e) {
       reject(e)
     }
@@ -136,57 +143,57 @@ export function parserMessageAsync(rawData: string[]): Promise<IParseMessageResu
 const messageRegex = [
   {
     name: 'Change Date',
-    regex: /^(\d{4}\/\d{1,2}\/\d{1,2})(（週\S）)/,
+    regex: /^(\d{4}\/\d{1,2}\/\d{1,2})(（週?\S）)/,
   },
   {
     name: 'Chat Room Setting',
     // eslint-disable-next-line
-    regex: /^(\d{2}\:\d{2})\t(.+)(已將聊天室的人數上限設為\d+人|變更了聊天室圖片)/,
+    regex: /^(\d{2}\:\d{2})\t+(.+)(已將聊天室的人數上限設為\d+人|變更了聊天室圖片)/,
   },
   {
     name: 'Force Remove Member',
     // eslint-disable-next-line
-    regex: /^(\d{2}\:\d{2})\t(.+)(已將.+強制退出社群。)/,
+    regex: /^(\d{2}\:\d{2})\t+(.+)(已將.+強制退出社群。)/,
   },
   {
     name: 'Member Join/Leave Group',
     // eslint-disable-next-line
-    regex: /^(\d{2}\:\d{2})\t(.+)(加入聊天|離開聊天)/,
+    regex: /^(\d{2}\:\d{2})\t+(.+)(加入聊天|離開聊天)/,
   },
   {
     name: 'Auto Reply Message',
     // eslint-disable-next-line
-    regex: /^(\d{2}\:\d{2})\t(Auto-reply)\t(.+)/,
+    regex: /^(\d{2}\:\d{2})\t+(Auto-reply)\t(.+)/,
   },
   {
     name: 'System Force Remove Message',
     // eslint-disable-next-line
-    regex: /^(\d{2}\:\d{2})\t(.+)(的訊息可能已違反社群服務條款而遭刪除。)/,
+    regex: /^(\d{2}\:\d{2})\t+(.+)(的訊息可能已違反社群服務條款而遭刪除。)/,
   },
   {
     name: 'Revoke Message',
     // eslint-disable-next-line
-    regex: /^(\d{2}\:\d{2})\t(.+)(已收回訊息)/,
+    regex: /^(\d{2}\:\d{2})\t+(.+)(已收回訊息)/,
   },
   {
     name: 'Sticker Message',
     // eslint-disable-next-line
-    regex: /^(\d{2}\:\d{2})\t(.+)\t(\[貼圖\])/,
+    regex: /^(\d{2}\:\d{2})\t+(.+)\t(\[貼圖\])/,
   },
   {
     name: 'Photo Message',
     // eslint-disable-next-line
-    regex: /^(\d{2}\:\d{2})\t(.+)\t(\[照片\])/,
+    regex: /^(\d{2}\:\d{2})\t+(.+)\t(\[照片\])/,
   },
   {
     name: 'Video Message',
     // eslint-disable-next-line
-    regex: /^(\d{2}\:\d{2})\t(.+)\t(\[影片\])/,
+    regex: /^(\d{2}\:\d{2})\t+(.+)\t(\[影片\])/,
   },
   {
     name: 'General Message',
     // eslint-disable-next-line
-    regex: /^(\d{2}\:\d{2})\t(.+)\t(.+)/,
+    regex: /^(\d{2}\:\d{2})\t+(.+)\t(.+)/,
   },
 ]
 
@@ -217,6 +224,20 @@ export function filterMessage(messages: Array<IMessage>, option: ICountFilterOpt
   })
 }
 
+export function countMessagesByUser(messages: Array<IMessage>) {
+  const countData: { [key: string]: number } = {}
+  messages.forEach((message) => {
+    if (countData[message.member] !== undefined) countData[message.member] += 1
+    else countData[message.member] = 0
+  })
+  // console.log(countData)
+  const countResult = Object.entries(countData).map(([user, count]) => {
+    return { user, count }
+  })
+  countResult.sort((a, b) => b.count - a.count)
+  return countResult
+}
+
 export function concatAllDaysMessages(daysMessages: Array<IDayMessages>) {
   return daysMessages.reduce((arr: Array<IMessage>, curr) => {
     arr.push(...curr.messages)
@@ -232,7 +253,3 @@ export function concatAllMessagesToString(messages: Array<IMessage>) {
     }, [])
     .join('\n')
 }
-
-// export function extractAllMessageByJieba(messageString: string, topk = 10) {
-//   return jieba.extract(messageString, topk)
-// }
